@@ -619,11 +619,24 @@ const TWEAKS = /*EDITMODE-BEGIN*/{
     pointer-events: none;
   }
   .vcard .info{
-    position:absolute; left:32px; right:32px; bottom:28px;
-    color: #F3EBE0;
-    display:flex; justify-content:space-between; align-items:flex-end;
+    position:absolute; left:0; top:0; bottom:0;
+    width: 60%;
+    padding: 32px;
+    box-sizing: border-box;
+    color: #000;
+    background: linear-gradient(to right, rgba(255,255,255,.18), rgba(255,255,255,.06));
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    border-right: 1px solid rgba(255,255,255,.12);
+    -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    display:flex; justify-content:flex-start; align-items:flex-end;
     gap: 16px;
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
   }
+  .vcard:hover .info{ opacity: 1; }
   .vcard .info .ttl{
     font-family: var(--serif);
     font-style: italic;
@@ -1445,7 +1458,7 @@ const TWEAKS = /*EDITMODE-BEGIN*/{
     <h2 class="reveal d1">Create something <em>meaningful</em>.</h2>
     <p class="reveal d2">Start your memory today, and we'll take care of the rest.</p>
     <div class="reveal d3" style="display:flex; justify-content:center; gap: 24px; flex-wrap: wrap; align-items: center;">
-      <a class="btn" href="mailto:rushikshah1102@gmail.com"><span>Start a Memory</span><span class="arr">→</span></a>
+      <button type="button" class="btn" id="startMemoryBtn" style="cursor:pointer;"><span>Start a Memory</span><span class="arr">→</span></button>
     </div>
   </section>
 </div>
@@ -1470,6 +1483,137 @@ const TWEAKS = /*EDITMODE-BEGIN*/{
     </div>
   </div>
 </footer>
+
+<!-- CONTACT CHOICE MODAL -->
+<div class="contact-modal" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+  <div class="contact-modal-backdrop" data-close></div>
+  <div class="contact-modal-panel">
+    <button type="button" class="contact-modal-close" data-close aria-label="Close">×</button>
+    <div class="section-lead" style="justify-content:flex-start;">HOW WOULD YOU LIKE TO BEGIN</div>
+    <h3 id="contactModalTitle">Start a <em>memory</em>.</h3>
+    <p class="contact-modal-note">Choose whichever feels easiest. We'll reply the same way you reach out.</p>
+    <div class="contact-choices">
+      <button type="button" class="contact-choice" data-choice="email">
+        <span class="contact-choice-label">Email</span>
+        <span class="contact-choice-sub">A thoughtful written reply</span>
+        <span class="arr">→</span>
+      </button>
+      <button type="button" class="contact-choice" data-choice="whatsapp">
+        <span class="contact-choice-label">WhatsApp</span>
+        <span class="contact-choice-sub">Message us directly</span>
+        <span class="arr">→</span>
+      </button>
+      <button type="button" class="contact-choice" data-choice="phone">
+        <span class="contact-choice-label">Phone</span>
+        <span class="contact-choice-sub">Speak with us on a call</span>
+        <span class="arr">→</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .contact-modal{
+    position: fixed; inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .contact-modal.is-open{ display: flex; animation: cmFade .3s ease; }
+  @keyframes cmFade { from { opacity: 0; } to { opacity: 1; } }
+  .contact-modal-backdrop{
+    position: absolute; inset: 0;
+    background: rgba(20,14,8,.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .contact-modal-panel{
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background: var(--paper, #F3EBE0);
+    color: var(--ink);
+    border-radius: 6px;
+    padding: 40px 36px 32px;
+    box-shadow: 0 40px 80px -30px rgba(40,24,12,.45);
+    animation: cmRise .4s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes cmRise { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .contact-modal-close{
+    position: absolute; top: 14px; right: 18px;
+    width: 32px; height: 32px;
+    border: none; background: transparent;
+    font-size: 26px; line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: color .2s ease;
+  }
+  .contact-modal-close:hover{ color: var(--ink); }
+  .contact-modal-panel h3{
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 34px;
+    line-height: 1.15;
+    margin: 10px 0 8px;
+    color: var(--ink);
+  }
+  .contact-modal-panel h3 em{
+    font-style: italic;
+    color: var(--accent);
+  }
+  .contact-modal-note{
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin: 0 0 22px;
+    line-height: 1.5;
+  }
+  .contact-choices{
+    display: flex; flex-direction: column;
+    gap: 10px;
+  }
+  .contact-choice{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--sans);
+    color: var(--ink);
+    transition: background .25s ease, border-color .25s ease, transform .25s ease;
+  }
+  .contact-choice:hover{
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper, #F3EBE0);
+    transform: translateY(-1px);
+  }
+  .contact-choice-label{
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+  }
+  .contact-choice-sub{
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .contact-choice:hover .contact-choice-sub{ color: rgba(243,235,224,.7); }
+  .contact-choice .arr{
+    font-size: 18px;
+    transition: transform .3s ease;
+  }
+  .contact-choice:hover .arr{ transform: translateX(4px); }
+</style>
 
 <!-- TWEAKS PANEL -->
 <div class="tweaks-panel" id="tweaks">
@@ -1647,6 +1791,41 @@ document.querySelectorAll('.faq-item').forEach(d => {
     }
   });
 });
+
+/* Start a Memory — contact choice modal */
+(function(){
+  const btn = document.getElementById('startMemoryBtn');
+  const modal = document.getElementById('contactModal');
+  if (!btn || !modal) return;
+
+  const PHONE = '7021032390';
+  const WA_NUMBER = '917021032390';
+  const EMAIL = 'rushikshah1102@gmail.com';
+  const SUBJECT = 'Starting a memory with Remembr';
+  const MESSAGE = "Hi Rushik,\n\nI'd like to start a memory with Remembr. I'm hoping to create a private video tribute for someone I've lost, and I'd love to learn more about how it works and what you'd need from me.\n\nCould we set up a short call to talk it through?\n\nThank you,";
+
+  const open = () => { modal.classList.add('is-open'); document.body.style.overflow = 'hidden'; };
+  const close = () => { modal.classList.remove('is-open'); document.body.style.overflow = ''; };
+
+  btn.addEventListener('click', open);
+  modal.addEventListener('click', (e) => {
+    if (e.target.dataset.close !== undefined) close();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+  modal.querySelector('[data-choice="email"]').addEventListener('click', () => {
+    window.location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(SUBJECT) + '&body=' + encodeURIComponent(MESSAGE);
+    close();
+  });
+  modal.querySelector('[data-choice="whatsapp"]').addEventListener('click', () => {
+    window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(MESSAGE), '_blank');
+    close();
+  });
+  modal.querySelector('[data-choice="phone"]').addEventListener('click', () => {
+    window.location.href = 'tel:+91' + PHONE;
+    close();
+  });
+})();
 </script>
 
 </body>
