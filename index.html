@@ -1392,6 +1392,54 @@
       overflow: hidden;
     }
 
+    /* heart of radial dash "stitches" that scatter outward from the cursor */
+    .heart-stitch {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 640px;
+      height: 580px;
+      max-width: 90vw;
+      max-height: 75vh;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .heart-stitch .stitch {
+      position: absolute;
+      width: 3px;
+      height: 18px;
+      background: #c97982;
+      border-radius: 2px;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    html[data-palette="rose"] .heart-stitch .stitch {
+      background: #d18c92;
+    }
+
+    html[data-palette="sage"] .heart-stitch .stitch {
+      background: #9c7e7e;
+    }
+
+    html[data-palette="ink"] .heart-stitch .stitch {
+      background: #e9a8ad;
+    }
+
+    @media (max-width: 720px) {
+      .heart-stitch {
+        width: 440px;
+        height: 400px;
+      }
+
+      .heart-stitch .stitch {
+        height: 14px;
+        width: 2.5px;
+      }
+    }
+
     .hero-bloom {
       position: absolute;
       inset: 0;
@@ -1916,6 +1964,9 @@
 
   <!-- HERO -->
   <section class="hero" id="hero" data-variant="C">
+    <!-- heart drawn from vertical-line "stitches"; lines scatter outward from the cursor -->
+    <div class="heart-stitch" id="heartStitch" aria-hidden="true"></div>
+
     <!-- soft floral composition (pure CSS, no bitmap) -->
     <div class="hero-bloom" aria-hidden="true">
       <span class="petal p1"></span>
@@ -2121,7 +2172,7 @@
 
       <div class="gallery">
         <div class="vcard v1 reveal d1" style="cursor:pointer;">
-          <video class="bg" src="uploads/sample1.mp4" muted playsinline preload="metadata"
+          <video class="bg" src="uploads/sample1.mp4" poster="uploads/thumbnail1.png" muted playsinline preload="metadata"
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
           <div class="tag">Portrait · <span class="vcard-dur"></span></div>
           <div class="play" aria-label="Play">
@@ -2136,7 +2187,7 @@
           </div>
         </div>
         <div class="vcard v2 reveal d2" style="cursor:pointer;">
-          <video class="bg" src="uploads/sample2.mp4" muted playsinline preload="metadata"
+          <video class="bg" src="uploads/sample2.mp4" poster="uploads/thumbnail2.png" muted playsinline preload="metadata"
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
           <div class="tag">Voice · <span class="vcard-dur"></span></div>
           <div class="play" aria-label="Play">
@@ -2150,7 +2201,7 @@
           </div>
         </div>
         <div class="vcard v3 reveal d3" style="cursor:pointer;">
-          <video class="bg" src="uploads/sample3.mp4" muted playsinline preload="metadata"
+          <video class="bg" src="uploads/sample3.mp4" poster="uploads/thumbnail3.png" muted playsinline preload="metadata"
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
           <div class="tag">Scene · <span class="vcard-dur"></span></div>
           <div class="play" aria-label="Play">
@@ -2673,8 +2724,9 @@
 
       card.addEventListener('click', (e) => {
         if (e.target.closest('.vcard-slider')) return;
-        if (vid.paused) {
-          vid.muted = false; vid.play();
+        if (!card.classList.contains('is-playing')) {
+          vid.muted = false;
+          vid.play().catch(() => { });
           playBtn.style.opacity = '0';
           card.classList.add('is-playing');
         } else {
@@ -2682,6 +2734,19 @@
           playBtn.style.opacity = '1';
           card.classList.remove('is-playing');
         }
+      });
+
+      // hover to preview (muted); leaving restores the poster thumbnail
+      card.addEventListener('mouseenter', () => {
+        if (card.classList.contains('is-playing')) return;
+        vid.muted = true;
+        try { vid.currentTime = 0; } catch (_) { }
+        vid.play().catch(() => { });
+      });
+      card.addEventListener('mouseleave', () => {
+        if (card.classList.contains('is-playing')) return;
+        vid.pause();
+        vid.load();
       });
 
       vid.addEventListener('ended', () => {
@@ -2710,6 +2775,106 @@
         }
       });
     });
+
+    /* Heart of vertical "stitch" lines — scatters from the cursor and re-forms */
+    (function () {
+      const root = document.getElementById('heartStitch');
+      const hero = document.getElementById('hero');
+      if (!root || !hero) return;
+
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const COUNT = 64;
+      const stitches = [];
+      let W = 0, H = 0, CX = 0, CY = 0, SCALE = 1;
+
+      function build() {
+        root.innerHTML = '';
+        stitches.length = 0;
+        const r = root.getBoundingClientRect();
+        W = r.width; H = r.height;
+        CX = W / 2; CY = H / 2;
+        // heart parametric bbox: x in [-16,16], y peak ~11.7, y bottom ~-16.7
+        const sx = (W * 0.86) / 32;
+        const sy = (H * 0.86) / 28.4;
+        SCALE = Math.min(sx, sy);
+
+        for (let i = 0; i < COUNT; i++) {
+          const t = (i / COUNT) * Math.PI * 2;
+          const px = 16 * Math.pow(Math.sin(t), 3);
+          const py = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+          const hx = CX + px * SCALE;
+          const hy = CY - (py + 2.5) * SCALE;
+
+          // outward direction = vector from heart center to point
+          const angle = Math.atan2(hy - CY, hx - CX);
+          const ox = Math.cos(angle);
+          const oy = Math.sin(angle);
+          // dash long-axis is vertical by default; subtract 90° so it aligns radially
+          const angleDeg = angle * 180 / Math.PI - 90;
+
+          const el = document.createElement('span');
+          el.className = 'stitch';
+          el.style.left = hx + 'px';
+          el.style.top = hy + 'px';
+          el.style.transform = `translate(-50%, -50%) rotate(${angleDeg}deg)`;
+          root.appendChild(el);
+
+          stitches.push({ el, hx, hy, ox, oy, angleDeg, cx: 0, cy: 0 });
+        }
+      }
+
+      build();
+      window.addEventListener('resize', build);
+
+      const mouse = { x: -9999, y: -9999, active: false };
+
+      function setMouse(e) {
+        const r = root.getBoundingClientRect();
+        mouse.x = e.clientX - r.left;
+        mouse.y = e.clientY - r.top;
+        mouse.active = true;
+      }
+
+      hero.addEventListener('mousemove', setMouse);
+      hero.addEventListener('mouseleave', () => { mouse.active = false; });
+      hero.addEventListener('touchmove', (e) => {
+        if (!e.touches[0]) return;
+        const r = root.getBoundingClientRect();
+        mouse.x = e.touches[0].clientX - r.left;
+        mouse.y = e.touches[0].clientY - r.top;
+        mouse.active = true;
+      }, { passive: true });
+      hero.addEventListener('touchend', () => { mouse.active = false; });
+
+      const RADIUS = 90;
+      const PUSH = 70;
+      const EASE = 0.18;
+
+      function tick() {
+        for (let i = 0; i < stitches.length; i++) {
+          const s = stitches[i];
+          let mag = 0;
+          if (mouse.active) {
+            const dx = s.hx - mouse.x;
+            const dy = s.hy - mouse.y;
+            const d = Math.hypot(dx, dy);
+            if (d < RADIUS) {
+              const force = 1 - d / RADIUS;
+              mag = force * force * PUSH;
+            }
+          }
+          const tx = s.ox * mag;
+          const ty = s.oy * mag;
+          s.cx += (tx - s.cx) * EASE;
+          s.cy += (ty - s.cy) * EASE;
+          s.el.style.transform = `translate(calc(-50% + ${s.cx.toFixed(2)}px), calc(-50% + ${s.cy.toFixed(2)}px)) rotate(${s.angleDeg}deg)`;
+        }
+        requestAnimationFrame(tick);
+      }
+
+      if (!reduceMotion) tick();
+    })();
 
     /* Start a Memory — contact choice modal */
     (function () {
