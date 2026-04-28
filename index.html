@@ -2876,6 +2876,53 @@
     /* MOBILE — phones (<= 720px) */
     @media (max-width: 720px) {
 
+      html,
+      body {
+        overflow-x: hidden;
+      }
+
+      /* Generic centering for narrow screens */
+      .wrap {
+        padding: 0 20px;
+      }
+
+      .section,
+      .quiet,
+      .create,
+      .how,
+      .team,
+      .tests,
+      .work .inner,
+      .trans,
+      .pricing,
+      .faq,
+      .final {
+        text-align: center;
+      }
+
+      .section h2,
+      .quiet h2,
+      .create h2,
+      .how h2,
+      .team h2,
+      .tests h2,
+      .work h2,
+      .faq h2,
+      .final h2,
+      .section .head,
+      .section .body,
+      .section .intro,
+      .section-lead,
+      .work .head,
+      .work .note {
+        margin-inline: auto;
+        max-width: 100%;
+      }
+
+      .section-lead {
+        justify-content: center;
+      }
+
       /* Process strip — stack visual on top, glass-text below */
       .process {
         padding: 40px 0 20px;
@@ -2922,11 +2969,20 @@
         -webkit-mask-image: none !important;
         color: var(--ink);
         gap: 8px;
+        text-align: center;
+        align-items: center;
+      }
+
+      .pcard .pstep {
+        justify-content: center;
+        text-align: center;
       }
 
       .pcard .ptxt {
         font-size: 17px;
         max-width: 100%;
+        text-align: center;
+        margin-inline: auto;
       }
 
       /* Share photo / message panel — full width below the strip */
@@ -3172,7 +3228,8 @@
                 <div class="msg-body">
                   <div class="bubble rcv">
                     <p>Hi, I have a special request.</p>
-                    <p>We lost all her childhood videos, and I'd really love to surprise my daughter on her 25th birthday with a dance video of her performing.</p>
+                    <p>We lost all her childhood videos, and I'd really love to surprise my daughter on her 25th
+                      birthday with a dance video of her performing.</p>
                     <p>Would you be able to help me create something like this?</p>
                   </div>
                   <div class="bubble snd">
@@ -3213,11 +3270,16 @@
               </div>
               <svg class="craft-art" viewBox="0 0 200 200" fill="none">
                 <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" />
-                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(60 100 100)" />
-                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(120 100 100)" />
-                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(180 100 100)" />
-                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(240 100 100)" />
-                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(300 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z"
+                  transform="rotate(60 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z"
+                  transform="rotate(120 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z"
+                  transform="rotate(180 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z"
+                  transform="rotate(240 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z"
+                  transform="rotate(300 100 100)" />
                 <path class="stem" d="M100,108 C100,140 100,160 100,180" />
                 <circle class="seed" cx="100" cy="100" r="5" />
               </svg>
@@ -3263,60 +3325,61 @@
 
       <div class="gallery" id="workGallery">
         <button class="gal-arrow prev" aria-label="Previous" type="button">
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round">
             <polyline points="7.5,2 3.5,6 7.5,10" />
           </svg>
         </button>
         <div class="gallery-viewport">
           <div class="gallery-track">
             <div class="vcard v1" style="cursor:pointer;">
-            <video class="bg" src="uploads/sample1.mp4" poster="uploads/thumbnail1.png" muted playsinline
-              preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
-            <div class="tag">Portrait · <span class="vcard-dur"></span></div>
-            <div class="play" aria-label="Play">
-              <svg viewBox="0 0 10 12" fill="currentColor">
-                <path d="M0 0 L10 6 L0 12 Z" />
-              </svg>
+              <video class="bg" src="uploads/sample1.mp4" poster="uploads/thumbnail1.png" muted playsinline
+                preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+              <div class="tag">Portrait · <span class="vcard-dur"></span></div>
+              <div class="play" aria-label="Play">
+                <svg viewBox="0 0 10 12" fill="currentColor">
+                  <path d="M0 0 L10 6 L0 12 Z" />
+                </svg>
+              </div>
+              <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
+              <div class="info">
+                <div class="ttl">Bringing someone closer to the parents they miss during one of the most auspicious
+                  moments of their family.</div>
+              </div>
             </div>
-            <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
-            <div class="info">
-              <div class="ttl">Bringing someone closer to the parents they miss during one of the most auspicious moments of their family.</div>
+            <div class="vcard v2" style="cursor:pointer;">
+              <video class="bg" src="uploads/sample2.mp4" poster="uploads/thumbnail2.png" muted playsinline
+                preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+              <div class="tag">Voice · <span class="vcard-dur"></span></div>
+              <div class="play" aria-label="Play">
+                <svg viewBox="0 0 10 12" fill="currentColor">
+                  <path d="M0 0 L10 6 L0 12 Z" />
+                </svg>
+              </div>
+              <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
+              <div class="info">
+                <div class="ttl">Helping a grandchild be embraced by the grandparents they have never seen.</div>
+              </div>
             </div>
-          </div>
-          <div class="vcard v2" style="cursor:pointer;">
-            <video class="bg" src="uploads/sample2.mp4" poster="uploads/thumbnail2.png" muted playsinline
-              preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
-            <div class="tag">Voice · <span class="vcard-dur"></span></div>
-            <div class="play" aria-label="Play">
-              <svg viewBox="0 0 10 12" fill="currentColor">
-                <path d="M0 0 L10 6 L0 12 Z" />
-              </svg>
+            <div class="vcard v3" style="cursor:pointer;">
+              <video class="bg" src="uploads/sample3.mp4" poster="uploads/thumbnail3.png" muted playsinline
+                preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+              <div class="tag">Scene · <span class="vcard-dur"></span></div>
+              <div class="play" aria-label="Play">
+                <svg viewBox="0 0 10 12" fill="currentColor">
+                  <path d="M0 0 L10 6 L0 12 Z" />
+                </svg>
+              </div>
+              <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
+              <div class="info">
+                <div class="ttl">Reminiscing over chai ki chuski on a rooftop with mom on his 20th birthday.</div>
+              </div>
             </div>
-            <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
-            <div class="info">
-              <div class="ttl">Helping a grandchild be embraced by the grandparents they have never seen.</div>
-            </div>
-          </div>
-          <div class="vcard v3" style="cursor:pointer;">
-            <video class="bg" src="uploads/sample3.mp4" poster="uploads/thumbnail3.png" muted playsinline
-              preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
-            <div class="tag">Scene · <span class="vcard-dur"></span></div>
-            <div class="play" aria-label="Play">
-              <svg viewBox="0 0 10 12" fill="currentColor">
-                <path d="M0 0 L10 6 L0 12 Z" />
-              </svg>
-            </div>
-            <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
-            <div class="info">
-              <div class="ttl">Reminiscing over chai ki chuski on a rooftop with mom on his 20th birthday.</div>
-            </div>
-          </div>
           </div>
         </div>
         <button class="gal-arrow next" aria-label="Next" type="button">
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round">
             <polyline points="4.5,2 8.5,6 4.5,10" />
           </svg>
         </button>
