@@ -1799,7 +1799,7 @@
       width: 60%;
       padding: 32px;
       box-sizing: border-box;
-      color: #000;
+      color: #ffffff;
       background: linear-gradient(to right, rgba(255, 255, 255, .18), rgba(255, 255, 255, .06));
       backdrop-filter: blur(14px) saturate(1.2);
       -webkit-backdrop-filter: blur(14px) saturate(1.2);
@@ -2870,6 +2870,215 @@
 
       .hero[data-variant="D"] {
         grid-template-columns: 1fr;
+      }
+    }
+
+    /* MOBILE — phones (<= 720px) */
+    @media (max-width: 720px) {
+
+      /* Process strip — stack visual on top, glass-text below */
+      .process {
+        padding: 40px 0 20px;
+      }
+
+      .process-title {
+        font-size: clamp(28px, 8vw, 40px);
+        margin-bottom: 24px;
+      }
+
+      .process-stack {
+        grid-template-rows: auto auto auto;
+        gap: 24px;
+      }
+
+      .pcard {
+        aspect-ratio: auto;
+        display: flex;
+        flex-direction: column;
+        min-height: auto;
+      }
+
+      .pcard .pmedia {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        aspect-ratio: 16/10;
+      }
+
+      .pcard .pglass,
+      .p-craft .pglass {
+        position: relative !important;
+        inset: auto !important;
+        left: auto !important;
+        right: auto !important;
+        width: 100% !important;
+        height: auto;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 0 !important;
+        padding: 18px 20px 8px;
+        mask-image: none !important;
+        -webkit-mask-image: none !important;
+        color: var(--ink);
+        gap: 8px;
+      }
+
+      .pcard .ptxt {
+        font-size: 17px;
+        max-width: 100%;
+      }
+
+      /* Share photo / message panel — full width below the strip */
+      .p-share-photo {
+        position: relative;
+        inset: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        padding: 14px;
+      }
+
+      .msg-card {
+        width: 100%;
+        max-width: 100%;
+        padding: 4px 8px;
+        gap: 6px;
+      }
+
+      .msg-head,
+      .msg-foot {
+        font-size: 9px;
+        gap: 8px;
+      }
+
+      .msg-foot .rule {
+        flex: 0 0 30px;
+      }
+
+      .bubble {
+        max-width: 90%;
+        font-size: 11.5px;
+        padding: 8px 12px;
+      }
+
+      /* Craft animation — same proportions, anchor lotus inside the strip */
+      .craft-stage {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        height: 100%;
+      }
+
+      .craft-art {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(50%, 160px);
+      }
+
+      /* Receive video — keep full media, smaller font for label/copy */
+
+      /* Stats — already collapses, just tighten margins */
+      .stats {
+        padding: 36px 0;
+      }
+
+      /* Our Work carousel — single video almost full-width with smaller arrows */
+      .work .inner {
+        padding: 70px 0;
+      }
+
+      .gallery {
+        padding: 0 20px;
+      }
+
+      .gallery-track {
+        gap: 12px;
+        padding: 8px 0;
+      }
+
+      .gallery-track>.vcard {
+        flex: 0 0 88cqw;
+        width: 88cqw;
+        border-radius: 20px;
+        transform: scale(0.94);
+      }
+
+      .gallery .gal-arrow {
+        width: 38px;
+        height: 38px;
+      }
+
+      .gallery .gal-arrow svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      .gallery .gal-arrow.prev {
+        left: -2px;
+      }
+
+      .gallery .gal-arrow.next {
+        right: -2px;
+      }
+
+      .vcard .info {
+        width: 78%;
+        padding: 18px;
+      }
+
+      .vcard .info .ttl {
+        font-size: 15px;
+      }
+
+      .vcard .play {
+        width: 38px;
+        height: 38px;
+        top: 14px;
+        right: 14px;
+      }
+
+      .vcard .tag {
+        top: 14px;
+        left: 14px;
+        font-size: 9px;
+      }
+
+      /* Testimonial marquee — smaller cards */
+      .test-card {
+        width: 220px;
+        border-radius: 12px;
+      }
+
+      .tests-track {
+        gap: 16px;
+      }
+
+      /* Hero — slightly smaller heart so headline reads */
+      .heart-stitch {
+        width: 320px !important;
+        height: 290px !important;
+        max-width: 92vw !important;
+        max-height: 50vh !important;
+      }
+    }
+
+    /* very small phones */
+    @media (max-width: 420px) {
+      .pcard .ptxt {
+        font-size: 16px;
+      }
+
+      .test-card {
+        width: 200px;
+      }
+
+      .gallery-track>.vcard {
+        flex: 0 0 92cqw;
+        width: 92cqw;
       }
     }
   </style>
