@@ -469,8 +469,6 @@
 
     /* STATS */
     .stats {
-      border-top: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
       padding: 60px 0;
       margin-top: 20px;
     }
@@ -479,6 +477,14 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 40px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .stat .num {
@@ -507,6 +513,759 @@
       color: var(--ink-soft);
       max-width: 28ch;
       line-height: 1.55;
+    }
+
+    /* PROCESS — three-step horizontal strips (Share · Craft · Receive) */
+    .process {
+      padding: 70px 0 30px;
+    }
+
+    .process-title {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.05;
+      color: var(--ink);
+      text-align: center;
+      margin: 0 0 36px;
+      letter-spacing: -.01em;
+    }
+
+    .process-stack {
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      background: var(--paper);
+    }
+
+    .pcard {
+      position: relative;
+      aspect-ratio: 16 / 5;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .pcard .pmedia {
+      position: absolute;
+      inset: 0;
+    }
+
+    .pcard .pbg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 18%;
+    }
+
+    /* Share — backdrop + scroll-driven hero photo on the right 2/3 */
+    .p-share {
+      background: transparent;
+    }
+
+    .p-share-bg {
+      display: none;
+    }
+
+    .p-share-photo {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 33%;
+      right: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Coded "real request" message panel — replaces the screenshot */
+    .msg-card {
+      width: 90%;
+      max-width: 780px;
+      max-height: 96%;
+      padding: 6px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      opacity: var(--p, 0);
+      transform:
+        translateY(calc((1 - var(--p, 0)) * 110%)) scale(calc(1 + (1 - var(--p, 0)) * 0.06));
+      filter: blur(calc((1 - var(--p, 0)) * 8px));
+      transition: opacity .08s linear, transform .08s linear, filter .08s linear;
+    }
+
+    .msg-head,
+    .msg-foot {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--sans);
+      font-size: 10.5px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .msg-head .lbl,
+    .msg-foot .caption {
+      white-space: nowrap;
+    }
+
+    .msg-head .rule,
+    .msg-foot .rule {
+      flex: 1;
+      height: 1px;
+      background: color-mix(in oklab, var(--accent) 38%, transparent);
+    }
+
+    .msg-foot .rule {
+      flex: 0 0 70px;
+    }
+
+    .msg-head .star {
+      color: var(--accent);
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    .msg-foot .heart {
+      color: var(--accent);
+      font-size: 16px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .msg-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 4px 0;
+    }
+
+    .bubble {
+      max-width: 78%;
+      padding: 9px 15px;
+      border-radius: 18px;
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.42;
+      color: #1f1c19;
+    }
+
+    .bubble p {
+      margin: 0;
+    }
+
+    .bubble p+p {
+      margin-top: 3px;
+    }
+
+    .bubble.rcv {
+      align-self: flex-start;
+      background: rgba(50, 38, 28, .08);
+      border-bottom-left-radius: 4px;
+    }
+
+    .bubble.snd {
+      align-self: flex-end;
+      background: #5a7ec4;
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .p-share .pglass {
+      width: 33% !important;
+    }
+
+    /* Craft — full-stage coded "weaving studio" animation (full card width) */
+    .craft-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .craft-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--paper);
+    }
+
+    .craft-bg::after {
+      content: none;
+    }
+
+    /* Warp — horizontal threads spanning the full width, alternating directions */
+    .craft-warp {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      pointer-events: none;
+    }
+
+    .craft-warp span {
+      height: 1px;
+      background: linear-gradient(to right,
+          transparent,
+          rgba(200, 107, 117, .25) 20%,
+          rgba(200, 107, 117, .5) 50%,
+          rgba(200, 107, 117, .25) 80%,
+          transparent);
+      transform: scaleX(0);
+      transform-origin: left center;
+      animation: weaveThread 6.5s ease-in-out infinite;
+    }
+
+    .craft-warp span:nth-child(even) {
+      transform-origin: right center;
+      animation-name: weaveThreadRev;
+    }
+
+    .craft-warp span:nth-child(1) {
+      animation-delay: 0.0s;
+    }
+
+    .craft-warp span:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .craft-warp span:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    .craft-warp span:nth-child(4) {
+      animation-delay: 0.9s;
+    }
+
+    .craft-warp span:nth-child(5) {
+      animation-delay: 1.2s;
+    }
+
+    .craft-warp span:nth-child(6) {
+      animation-delay: 1.5s;
+    }
+
+    .craft-warp span:nth-child(7) {
+      animation-delay: 1.8s;
+    }
+
+    .craft-warp span:nth-child(8) {
+      animation-delay: 2.1s;
+    }
+
+    .craft-warp span:nth-child(9) {
+      animation-delay: 2.4s;
+    }
+
+    .craft-warp span:nth-child(10) {
+      animation-delay: 2.7s;
+    }
+
+    .craft-warp span:nth-child(11) {
+      animation-delay: 3.0s;
+    }
+
+    .craft-warp span:nth-child(12) {
+      animation-delay: 3.3s;
+    }
+
+    @keyframes weaveThread {
+
+      0%,
+      4% {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+
+      32%,
+      62% {
+        transform: scaleX(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes weaveThreadRev {
+
+      0%,
+      4% {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+
+      32%,
+      62% {
+        transform: scaleX(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+    }
+
+    /* Weft — vertical threads drawing top-to-bottom in a left-to-right wave */
+    .craft-weft {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .craft-weft span {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom,
+          transparent,
+          rgba(240, 168, 173, .35) 25%,
+          rgba(240, 168, 173, .6) 50%,
+          rgba(240, 168, 173, .35) 75%,
+          transparent);
+      transform: scaleY(0);
+      transform-origin: top center;
+      animation: weftThread 5.5s ease-in-out infinite;
+    }
+
+    .craft-weft span:nth-child(even) {
+      transform-origin: bottom center;
+    }
+
+    .craft-weft span:nth-child(1) {
+      left: 6%;
+      animation-delay: 0.0s;
+    }
+
+    .craft-weft span:nth-child(2) {
+      left: 16%;
+      animation-delay: 0.4s;
+    }
+
+    .craft-weft span:nth-child(3) {
+      left: 26%;
+      animation-delay: 0.8s;
+    }
+
+    .craft-weft span:nth-child(4) {
+      left: 38%;
+      animation-delay: 1.2s;
+    }
+
+    .craft-weft span:nth-child(5) {
+      left: 48%;
+      animation-delay: 1.6s;
+    }
+
+    .craft-weft span:nth-child(6) {
+      left: 60%;
+      animation-delay: 2.0s;
+    }
+
+    .craft-weft span:nth-child(7) {
+      left: 72%;
+      animation-delay: 2.4s;
+    }
+
+    .craft-weft span:nth-child(8) {
+      left: 82%;
+      animation-delay: 2.8s;
+    }
+
+    .craft-weft span:nth-child(9) {
+      left: 92%;
+      animation-delay: 3.2s;
+    }
+
+    @keyframes weftThread {
+
+      0%,
+      4% {
+        transform: scaleY(0);
+        opacity: 0;
+      }
+
+      32%,
+      62% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scaleY(0);
+        opacity: 0;
+      }
+    }
+
+    /* Embroidered "stitch line" — long horizontal dashed line that traces across */
+    .craft-stitchline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 18px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .craft-stitchline svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .craft-stitchline path {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-dasharray: 6 8;
+      stroke-dashoffset: 0;
+      opacity: 0;
+      animation: stitchTrail 6s ease-in-out infinite;
+    }
+
+    @keyframes stitchTrail {
+
+      0%,
+      8% {
+        stroke-dashoffset: 1200;
+        opacity: 0;
+      }
+
+      18% {
+        opacity: .9;
+      }
+
+      55% {
+        stroke-dashoffset: 0;
+        opacity: .9;
+      }
+
+      75% {
+        stroke-dashoffset: 0;
+        opacity: .9;
+      }
+
+      95%,
+      100% {
+        stroke-dashoffset: -1200;
+        opacity: 0;
+      }
+    }
+
+    /* Central bloom — anchored on the left side of the strip */
+    .craft-art {
+      position: absolute;
+      top: 50%;
+      left: 6%;
+      transform: translateY(-50%);
+      width: min(28%, 200px);
+      height: 80%;
+      display: block;
+    }
+
+    .craft-art .petal,
+    .craft-art .stem {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      opacity: 0;
+      animation: drawPetal 9s ease-in-out infinite;
+    }
+
+    .craft-art .petal:nth-of-type(1) {
+      animation-delay: 0.0s;
+    }
+
+    .craft-art .petal:nth-of-type(2) {
+      animation-delay: 0.35s;
+    }
+
+    .craft-art .petal:nth-of-type(3) {
+      animation-delay: 0.7s;
+    }
+
+    .craft-art .petal:nth-of-type(4) {
+      animation-delay: 1.05s;
+    }
+
+    .craft-art .petal:nth-of-type(5) {
+      animation-delay: 1.4s;
+    }
+
+    .craft-art .petal:nth-of-type(6) {
+      animation-delay: 1.75s;
+    }
+
+    .craft-art .stem {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation-delay: 2.2s;
+    }
+
+    .craft-art .seed {
+      fill: var(--accent);
+      transform-origin: 100px 100px;
+      transform: scale(0);
+      opacity: 0;
+      animation: popSeed 9s ease-out infinite;
+      animation-delay: 2.4s;
+    }
+
+    @keyframes drawPetal {
+      0% {
+        stroke-dashoffset: 220;
+        opacity: 0;
+      }
+
+      8% {
+        opacity: 1;
+      }
+
+      45% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+
+      75% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+
+      92% {
+        stroke-dashoffset: -220;
+        opacity: 0;
+      }
+
+      100% {
+        stroke-dashoffset: -220;
+        opacity: 0;
+      }
+    }
+
+    @keyframes popSeed {
+
+      0%,
+      30% {
+        transform: scale(0);
+        opacity: 0;
+      }
+
+      45% {
+        transform: scale(1.25);
+        opacity: 1;
+      }
+
+      55%,
+      80% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      95%,
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* drifting dust motes for atmosphere */
+    .craft-dust {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .craft-dust span {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 240, 220, .9), rgba(255, 240, 220, 0) 70%);
+      animation: driftDust 12s linear infinite;
+    }
+
+    .craft-dust span:nth-child(1) {
+      left: 6%;
+      bottom: -10%;
+      animation-delay: 0s;
+      animation-duration: 14s;
+    }
+
+    .craft-dust span:nth-child(2) {
+      left: 18%;
+      bottom: -10%;
+      animation-delay: 2s;
+      animation-duration: 11s;
+    }
+
+    .craft-dust span:nth-child(3) {
+      left: 30%;
+      bottom: -10%;
+      animation-delay: 5s;
+      animation-duration: 13s;
+    }
+
+    .craft-dust span:nth-child(4) {
+      left: 42%;
+      bottom: -10%;
+      animation-delay: 7s;
+      animation-duration: 15s;
+    }
+
+    .craft-dust span:nth-child(5) {
+      left: 56%;
+      bottom: -10%;
+      animation-delay: 3s;
+      animation-duration: 12s;
+    }
+
+    .craft-dust span:nth-child(6) {
+      left: 68%;
+      bottom: -10%;
+      animation-delay: 9s;
+      animation-duration: 16s;
+    }
+
+    .craft-dust span:nth-child(7) {
+      left: 80%;
+      bottom: -10%;
+      animation-delay: 4s;
+      animation-duration: 13s;
+    }
+
+    .craft-dust span:nth-child(8) {
+      left: 92%;
+      bottom: -10%;
+      animation-delay: 6s;
+      animation-duration: 15s;
+    }
+
+    @keyframes driftDust {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: .9;
+      }
+
+      90% {
+        opacity: .6;
+      }
+
+      100% {
+        transform: translateY(-380px) translateX(20px);
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .craft-warp span,
+      .craft-weft span,
+      .craft-stitchline path,
+      .craft-art .petal,
+      .craft-art .stem,
+      .craft-art .seed,
+      .craft-dust span {
+        animation: none;
+        opacity: 1;
+      }
+
+      .craft-warp span {
+        transform: scaleX(1);
+      }
+
+      .craft-weft span {
+        transform: scaleY(1);
+      }
+
+      .craft-art .petal,
+      .craft-art .stem {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* Craft — glass on the right 1/3 (zigzag — opposite of Share & Receive) */
+    /* Glass layer — left strip with the step label & message */
+    .pcard .pglass {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 46%;
+      padding: 28px 32px;
+      color: var(--ink);
+      background: linear-gradient(to right, rgba(255, 255, 255, .55), rgba(255, 255, 255, .12));
+      backdrop-filter: blur(14px) saturate(1.2);
+      -webkit-backdrop-filter: blur(14px) saturate(1.2);
+      border-right: 1px solid rgba(255, 255, 255, .22);
+      -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+      mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .pcard .pstep {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .pcard .pstep .num {
+      color: var(--accent);
+      margin-right: 8px;
+    }
+
+    .pcard .ptxt {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(17px, 1.5vw, 22px);
+      line-height: 1.32;
+      color: var(--ink);
+      max-width: 32ch;
+    }
+
+    html[data-palette="ink"] .pcard .pglass {
+      background: linear-gradient(to right, rgba(20, 16, 12, .55), rgba(20, 16, 12, .12));
+      color: var(--ink);
+      border-right-color: rgba(243, 235, 224, .12);
+    }
+
+    /* Craft — glass on the right 1/3 (zigzag — opposite of Share & Receive) */
+    .p-craft .pglass {
+      left: auto;
+      right: 0;
+      width: 33% !important;
+      background: linear-gradient(to left, rgba(255, 255, 255, .55), rgba(255, 255, 255, .12));
+      border-right: 0;
+      border-left: 1px solid rgba(255, 255, 255, .22);
+      -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+      mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    html[data-palette="ink"] .p-craft .pglass {
+      background: linear-gradient(to left, rgba(20, 16, 12, .55), rgba(20, 16, 12, .12));
+      border-left-color: rgba(243, 235, 224, .12);
     }
 
     /* SECTIONS */
@@ -756,6 +1515,62 @@
       gap: 40px 60px;
     }
 
+    /* horizontal scrolling chain — pauses on hover */
+    .tests-marquee {
+      position: relative;
+      overflow: hidden;
+      margin-top: 8px;
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+    }
+
+    .tests-track {
+      display: flex;
+      gap: 24px;
+      width: max-content;
+      animation: marqueeRoll 60s linear infinite;
+      will-change: transform;
+    }
+
+    .tests-marquee:hover .tests-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes marqueeRoll {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+
+      to {
+        transform: translate3d(calc(-50% - 12px), 0, 0);
+      }
+    }
+
+    .test-card {
+      flex: 0 0 auto;
+      width: 320px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: transparent;
+      transition: transform .4s ease;
+    }
+
+    .test-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .test-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tests-track {
+        animation: none;
+      }
+    }
+
     .test {
       padding: 36px 0 0;
       border-top: 1px solid var(--rule);
@@ -859,26 +1674,88 @@
     }
 
     .gallery {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 28px;
-      max-width: 960px;
+      position: relative;
+      max-width: 1240px;
       margin: 0 auto;
+      padding: 0 70px;
+    }
+
+    .gallery-viewport {
+      position: relative;
+      overflow: hidden;
+      container-type: inline-size;
+    }
+
+    .gallery-track {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      will-change: transform;
+      padding: 12px 0;
+    }
+
+    .gallery-track>.vcard {
+      flex: 0 0 70cqw;
+      width: 70cqw;
+      border-radius: 28px;
+      transform: scale(.92);
+      opacity: .45;
+      transition: transform .55s cubic-bezier(.2, .7, .2, 1), opacity .55s ease, box-shadow .55s ease;
+      box-shadow: 0 14px 30px -20px rgba(60, 40, 28, .4);
+    }
+
+    .gallery-track>.vcard.is-active {
+      transform: scale(1);
+      opacity: 1;
+      box-shadow: 0 26px 50px -22px rgba(60, 40, 28, .55);
+    }
+
+    .gallery .gal-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 4;
+      transition: background .25s ease, color .25s ease, transform .25s ease, box-shadow .25s ease;
+      box-shadow: 0 8px 20px -10px rgba(60, 40, 28, .35);
+    }
+
+    .gallery .gal-arrow svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .gallery .gal-arrow:hover {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .gallery .gal-arrow.prev {
+      left: 8px;
+    }
+
+    .gallery .gal-arrow.next {
+      right: 8px;
     }
 
     .vcard {
       position: relative;
       aspect-ratio: 16/9;
-      border-radius: 3px;
       overflow: hidden;
       cursor: pointer;
       background: #2C1F15;
-      box-shadow: 0 20px 40px -24px rgba(60, 40, 28, .5);
       transition: transform .6s cubic-bezier(.2, .7, .2, 1);
-    }
-
-    .vcard:hover {
-      transform: translateY(-4px);
     }
 
     .vcard .bg {
@@ -1392,7 +2269,7 @@
       overflow: hidden;
     }
 
-    /* heart of radial dash "stitches" that scatter outward from the cursor */
+    /* heart pattern of red circle "spots" — the whole heart pumps together */
     .heart-stitch {
       position: absolute;
       left: 50%;
@@ -1404,39 +2281,62 @@
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 1;
+      animation: heartBeat 1.4s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    @keyframes heartBeat {
+
+      0%,
+      35%,
+      70%,
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      14% {
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+
+      45% {
+        transform: translate(-50%, -50%) scale(1.04);
+      }
     }
 
     .heart-stitch .stitch {
       position: absolute;
-      width: 3px;
-      height: 18px;
-      background: #c97982;
-      border-radius: 2px;
-      transform: translate(-50%, -50%);
-      will-change: transform;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 42% 42%, #f0a8ad 0%, #c86b75 55%, transparent 78%);
+      border-radius: 50%;
+      opacity: .3;
+      --tx: 0px;
+      --ty: 0px;
+      translate: calc(-50% + var(--tx)) calc(-50% + var(--ty));
     }
 
     html[data-palette="rose"] .heart-stitch .stitch {
-      background: #d18c92;
+      background: radial-gradient(circle at 42% 42%, #f5b6bc 0%, #c86b75 55%, transparent 78%);
     }
 
     html[data-palette="sage"] .heart-stitch .stitch {
-      background: #9c7e7e;
+      background: radial-gradient(circle at 42% 42%, #cfaeae 0%, #8a6f6f 55%, transparent 78%);
     }
 
     html[data-palette="ink"] .heart-stitch .stitch {
-      background: #e9a8ad;
+      background: radial-gradient(circle at 42% 42%, #f3b8bc 0%, #c87078 55%, transparent 80%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .heart-stitch {
+        animation: none;
+      }
     }
 
     @media (max-width: 720px) {
       .heart-stitch {
         width: 440px;
         height: 400px;
-      }
-
-      .heart-stitch .stitch {
-        height: 14px;
-        width: 2.5px;
       }
     }
 
@@ -1898,6 +2798,31 @@
         gap: 32px;
       }
 
+      .pcard {
+        aspect-ratio: 16/9;
+      }
+
+      .pcard .pglass {
+        width: 60%;
+        padding: 18px 20px;
+      }
+
+      .pstack .ph {
+        width: 22%;
+      }
+
+      .pstack .ph.p1 {
+        left: 30%;
+      }
+
+      .pstack .ph.p2 {
+        left: 52%;
+      }
+
+      .pstack .ph.p3 {
+        left: 74%;
+      }
+
       .section {
         padding: 80px 0;
       }
@@ -1967,24 +2892,9 @@
     <!-- heart drawn from vertical-line "stitches"; lines scatter outward from the cursor -->
     <div class="heart-stitch" id="heartStitch" aria-hidden="true"></div>
 
-    <!-- soft floral composition (pure CSS, no bitmap) -->
-    <div class="hero-bloom" aria-hidden="true">
-      <span class="petal p1"></span>
-      <span class="petal p2"></span>
-      <span class="petal p3"></span>
-      <span class="petal p4"></span>
-      <span class="petal p5"></span>
-      <span class="petal p6"></span>
-      <span class="petal p7"></span>
-      <span class="petal p8"></span>
-      <span class="glow"></span>
-    </div>
-
     <!-- editorial corner marks -->
     <div class="hero-marks" aria-hidden="true">
-      <span class="mk bl">+</span>
-      <span class="mk br">+</span>
-      <span class="mk sig">— a studio for remembrance —</span>
+      <span class="mk sig"></span>
     </div>
 
     <div class="wrap">
@@ -1998,7 +2908,7 @@
       </h1>
 
       <p class="sub reveal d2">
-        A personal, private message from the ones who can't be there for your wedding, your birthday, or any milestone
+        A personal, private message from the ones who can't be there for your wedding, your birthday, or any occasion
         that matters.
       </p>
 
@@ -2032,19 +2942,184 @@
     </section>
   </div>
 
-  <!-- EMOTIONAL BRIDGE -->
+  <!-- PROCESS — Share · Craft · Receive -->
   <div class="wrap">
-    <section class="section quiet">
-      <div class="section-lead reveal" style="justify-content:center;">FOR THE ONES YOU MISS</div>
-      <h2 class="head reveal d1">Not everything can be held onto —<br /><em>but some things can be remembered more
-          vividly.</em></h2>
-      <div class="body reveal d2">
-        <p>More closely. More personally.</p>
-        <p style="font-family: var(--serif); font-style: italic; color: var(--ink); font-size: 24px; margin-top: 2em;">
-          We help you create something you can return to.</p>
+    <section class="process reveal">
+      <h2 class="process-title reveal">How it works</h2>
+      <div class="process-stack">
+
+        <article class="pcard p-share reveal d1">
+          <div class="pmedia">
+            <div class="p-share-bg" aria-hidden="true"></div>
+            <div class="p-share-photo">
+              <div class="msg-card" role="figure" aria-label="A real client request">
+                <div class="msg-head">
+                  <span class="lbl">A real request</span>
+                  <span class="rule"></span>
+                  <span class="star">✦</span>
+                </div>
+                <div class="msg-body">
+                  <div class="bubble rcv">
+                    <p>Hi, I have a special request.</p>
+                    <p>We lost all her childhood videos, and I'd really love to surprise my daughter on her 25th birthday with a dance video of her performing.</p>
+                    <p>Would you be able to help me create something like this?</p>
+                  </div>
+                  <div class="bubble snd">
+                    <p>Of course, this sounds really special.</p>
+                    <p>We'd love to help you bring it to life.</p>
+                  </div>
+                </div>
+                <div class="msg-foot">
+                  <span class="heart">♡</span>
+                  <span class="rule"></span>
+                  <span class="caption">Every memory deserves to be seen again.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pglass">
+            <div class="pstep"><span class="num">01</span>Share</div>
+            <div class="ptxt">You share photos, voice notes, and the brief — anything that helps us remember them.</div>
+          </div>
+        </article>
+
+        <article class="pcard p-craft reveal d2">
+          <div class="pmedia">
+            <div class="craft-stage" aria-hidden="true">
+              <div class="craft-bg"></div>
+              <div class="craft-warp">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="craft-weft">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="craft-stitchline">
+                <svg viewBox="0 0 1200 18" preserveAspectRatio="none" fill="none">
+                  <path d="M0,9 C150,2 300,16 450,9 C600,2 750,16 900,9 C1050,2 1200,16 1200,9" />
+                </svg>
+              </div>
+              <svg class="craft-art" viewBox="0 0 200 200" fill="none">
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(60 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(120 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(180 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(240 100 100)" />
+                <path class="petal" d="M100,100 C92,72 92,48 100,28 C108,48 108,72 100,100 Z" transform="rotate(300 100 100)" />
+                <path class="stem" d="M100,108 C100,140 100,160 100,180" />
+                <circle class="seed" cx="100" cy="100" r="5" />
+              </svg>
+              <div class="craft-dust">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+          <div class="pglass">
+            <div class="pstep"><span class="num">02</span>Craft</div>
+            <div class="ptxt">Our team crafts the piece by hand, frame by frame, guided entirely by your intent.</div>
+          </div>
+        </article>
+
+        <article class="pcard p-receive reveal d3">
+          <div class="pmedia">
+            <video class="pbg" src="landing/Tandava_TBU.mp4" poster="uploads/thumbnail3.png" muted loop playsinline
+              autoplay preload="metadata"></video>
+          </div>
+          <div class="pglass">
+            <div class="pstep"><span class="num">03</span>Receive</div>
+            <div class="ptxt">A private film returned to you alone — yours to keep, revisit, and share if you choose.
+            </div>
+          </div>
+        </article>
+
       </div>
     </section>
   </div>
+
+  <!-- OUR WORK — moved directly below the process strip, now a horizontal carousel -->
+  <section class="work" id="work">
+    <div class="wrap inner">
+      <div class="head">
+        <div>
+          <div class="section-lead reveal">OUR WORK · WITH CONSENT</div>
+          <h2 class="reveal d1">Most of our work stays <em>private</em>.</h2>
+        </div>
+        <p class="note reveal d2">The three pieces below are shared with the families' written permission. Everything
+          else lives only with the people it was made for. That is the point.</p>
+      </div>
+
+      <div class="gallery" id="workGallery">
+        <button class="gal-arrow prev" aria-label="Previous" type="button">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="7.5,2 3.5,6 7.5,10" />
+          </svg>
+        </button>
+        <div class="gallery-viewport">
+          <div class="gallery-track">
+            <div class="vcard v1" style="cursor:pointer;">
+            <video class="bg" src="uploads/sample1.mp4" poster="uploads/thumbnail1.png" muted playsinline
+              preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+            <div class="tag">Portrait · <span class="vcard-dur"></span></div>
+            <div class="play" aria-label="Play">
+              <svg viewBox="0 0 10 12" fill="currentColor">
+                <path d="M0 0 L10 6 L0 12 Z" />
+              </svg>
+            </div>
+            <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
+            <div class="info">
+              <div class="ttl">Bringing someone closer to the parents they miss during one of the most auspicious moments of their family.</div>
+            </div>
+          </div>
+          <div class="vcard v2" style="cursor:pointer;">
+            <video class="bg" src="uploads/sample2.mp4" poster="uploads/thumbnail2.png" muted playsinline
+              preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+            <div class="tag">Voice · <span class="vcard-dur"></span></div>
+            <div class="play" aria-label="Play">
+              <svg viewBox="0 0 10 12" fill="currentColor">
+                <path d="M0 0 L10 6 L0 12 Z" />
+              </svg>
+            </div>
+            <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
+            <div class="info">
+              <div class="ttl">Helping a grandchild be embraced by the grandparents they have never seen.</div>
+            </div>
+          </div>
+          <div class="vcard v3" style="cursor:pointer;">
+            <video class="bg" src="uploads/sample3.mp4" poster="uploads/thumbnail3.png" muted playsinline
+              preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
+            <div class="tag">Scene · <span class="vcard-dur"></span></div>
+            <div class="play" aria-label="Play">
+              <svg viewBox="0 0 10 12" fill="currentColor">
+                <path d="M0 0 L10 6 L0 12 Z" />
+              </svg>
+            </div>
+            <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
+            <div class="info">
+              <div class="ttl">Reminiscing over chai ki chuski on a rooftop with mom on his 20th birthday.</div>
+            </div>
+          </div>
+          </div>
+        </div>
+        <button class="gal-arrow next" aria-label="Next" type="button">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4.5,2 8.5,6 4.5,10" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="foot">
+        <p>If you'd like to see more, we'll walk you through examples on the call — many with details we don't publish
+          here.</p>
+        <a class="btn btn-ghost" href="#contact"><span>Book a private call</span><span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+
 
   <!-- WHAT WE CREATE -->
   <div class="wrap">
@@ -2075,34 +3150,6 @@
     </section>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <section class="how" id="how">
-    <div class="wrap inner">
-      <div class="section-lead reveal">HOW IT WORKS</div>
-      <h2 class="reveal d1">A simple, thoughtful <em>process</em>.</h2>
-      <div class="steps steps-3">
-        <div class="step reveal d1">
-          <div class="n">i</div>
-          <h3>Share</h3>
-          <p>Send us a few photos and the message you'd like to hear.</p>
-          <div class="tag">at your pace</div>
-        </div>
-        <div class="step reveal d2">
-          <div class="n">ii</div>
-          <h3>Craft</h3>
-          <p>We carefully bring it together — voice, expression, and timing — handled with sensitivity and attention.
-          </p>
-          <div class="tag">one artist · no rush</div>
-        </div>
-        <div class="step reveal d3">
-          <div class="n">iii</div>
-          <h3>Receive</h3>
-          <p>You receive a private, lifelike video you can keep, revisit, and share if you choose.</p>
-          <div class="tag">encrypted · yours</div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- USE CASES -->
   <div class="wrap">
@@ -2133,135 +3180,23 @@
       <h2 class="reveal d1"
         style="font-family: var(--serif); font-weight: 300; font-size: clamp(40px, 5vw, 72px); line-height: 1.08; margin: 0 0 60px; max-width: 18ch;">
         For moments that <em>deserve</em> more than a photograph.</h2>
-      <div class="grid">
-        <figure class="test reveal d1">
-          <img src="landing/testimonial-4.png"
-            alt="WhatsApp message: Was a little unsure at first, not gonna lie. But it didn't feel like some AI thing. It felt personal!!" />
-          <cite>Riya · Mumbai</cite>
-        </figure>
-        <figure class="test reveal d2">
-          <img src="landing/testimonial-3.png"
-            alt="WhatsApp message: The best part was how it was handled. They didn't rush anything and were super thoughtful throughout. That made a big difference :)" />
-          <cite>Ankit · Ahmedabad</cite>
-        </figure>
-        <figure class="test reveal d1">
-          <img src="landing/testimonial-2.png"
-            alt="WhatsApp message: I made this for my mother. Hearing her voice again, even for a few seconds, meant more than I can explain!!" />
-          <cite>Neha · Bangalore</cite>
-        </figure>
-        <figure class="test reveal d2">
-          <img src="landing/testimonial-1.png"
-            alt="WhatsApp message: I wasn't sure what to expect, but the way it was handled made all the difference. It didn't feel artificial. It just felt… close." />
-          <cite>Rahul · Delhi</cite>
-        </figure>
-      </div>
-    </section>
-  </div>
-
-  <!-- OUR WORK -->
-  <section class="work" id="work">
-    <div class="wrap inner">
-      <div class="head">
-        <div>
-          <div class="section-lead reveal">OUR WORK · WITH CONSENT</div>
-          <h2 class="reveal d1">Most of our work stays <em>private</em>.</h2>
-        </div>
-        <p class="note reveal d2">The three pieces below are shared with the families' written permission. Everything
-          else lives only with the people it was made for. That is the point.</p>
-      </div>
-
-      <div class="gallery">
-        <div class="vcard v1 reveal d1" style="cursor:pointer;">
-          <video class="bg" src="uploads/sample1.mp4" poster="uploads/thumbnail1.png" muted playsinline preload="metadata"
-            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
-          <div class="tag">Portrait · <span class="vcard-dur"></span></div>
-          <div class="play" aria-label="Play">
-            <svg viewBox="0 0 10 12" fill="currentColor">
-              <path d="M0 0 L10 6 L0 12 Z" />
-            </svg>
-          </div>
-          <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
-          <div class="info">
-            <div class="ttl">Bringing someone closer to the parents they miss during one of the most auspicious moments
-              of their family.</div>
-          </div>
-        </div>
-        <div class="vcard v2 reveal d2" style="cursor:pointer;">
-          <video class="bg" src="uploads/sample2.mp4" poster="uploads/thumbnail2.png" muted playsinline preload="metadata"
-            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
-          <div class="tag">Voice · <span class="vcard-dur"></span></div>
-          <div class="play" aria-label="Play">
-            <svg viewBox="0 0 10 12" fill="currentColor">
-              <path d="M0 0 L10 6 L0 12 Z" />
-            </svg>
-          </div>
-          <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
-          <div class="info">
-            <div class="ttl">Helping a grandchild be embraced by the grandparents they have never seen.</div>
-          </div>
-        </div>
-        <div class="vcard v3 reveal d3" style="cursor:pointer;">
-          <video class="bg" src="uploads/sample3.mp4" poster="uploads/thumbnail3.png" muted playsinline preload="metadata"
-            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
-          <div class="tag">Scene · <span class="vcard-dur"></span></div>
-          <div class="play" aria-label="Play">
-            <svg viewBox="0 0 10 12" fill="currentColor">
-              <path d="M0 0 L10 6 L0 12 Z" />
-            </svg>
-          </div>
-          <div class="vcard-slider"><input type="range" min="0" max="1000" value="0" class="vcard-range" /></div>
-          <div class="info">
-            <div class="ttl">Reminiscing over chai ki chuski on a rooftop with mom on his 20th birthday.</div>
-          </div>
+      <div class="tests-marquee reveal d2" aria-label="Family messages">
+        <div class="tests-track">
+          <figure class="test-card"><img src="landing/1.1.png" alt="Family message" loading="lazy" /></figure>
+          <figure class="test-card"><img src="landing/1.2.png" alt="Family message" loading="lazy" /></figure>
+          <figure class="test-card"><img src="landing/1.3.png" alt="Family message" loading="lazy" /></figure>
+          <figure class="test-card"><img src="landing/1.4.png" alt="Family message" loading="lazy" /></figure>
+          <figure class="test-card"><img src="landing/1.5.png" alt="Family message" loading="lazy" /></figure>
+          <figure class="test-card"><img src="landing/1.6.png" alt="Family message" loading="lazy" /></figure>
+          <!-- duplicate set for seamless loop -->
+          <figure class="test-card" aria-hidden="true"><img src="landing/1.1.png" alt="" loading="lazy" /></figure>
+          <figure class="test-card" aria-hidden="true"><img src="landing/1.2.png" alt="" loading="lazy" /></figure>
+          <figure class="test-card" aria-hidden="true"><img src="landing/1.3.png" alt="" loading="lazy" /></figure>
+          <figure class="test-card" aria-hidden="true"><img src="landing/1.4.png" alt="" loading="lazy" /></figure>
+          <figure class="test-card" aria-hidden="true"><img src="landing/1.5.png" alt="" loading="lazy" /></figure>
+          <figure class="test-card" aria-hidden="true"><img src="landing/1.6.png" alt="" loading="lazy" /></figure>
         </div>
       </div>
-
-      <div class="foot">
-        <p>If you'd like to see more, we'll walk you through examples on the call — many with details we don't publish
-          here.</p>
-        <a class="btn btn-ghost" href="#contact"><span>Book a private call</span><span class="arr">→</span></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRUST -->
-  <div class="wrap">
-    <section class="section trans">
-      <div>
-        <div class="section-lead reveal">TRUST</div>
-        <h2 class="reveal d1">Built with <em>care</em> and <em>respect</em>.</h2>
-      </div>
-      <div class="col">
-        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap: 0;">
-          <li class="reveal d1"
-            style="padding: 22px 0; border-top: 1px solid var(--rule); font-family: var(--serif); font-size: 22px; color: var(--ink); line-height: 1.35;">
-            Your photos and videos remain <em style="color:var(--ink-soft);">private</em>.</li>
-          <li class="reveal d2"
-            style="padding: 22px 0; border-top: 1px solid var(--rule); font-family: var(--serif); font-size: 22px; color: var(--ink); line-height: 1.35;">
-            Nothing is <em style="color:var(--ink-soft);">reused</em> or shared.</li>
-          <li class="reveal d3"
-            style="padding: 22px 0; border-top: 1px solid var(--rule); font-family: var(--serif); font-size: 22px; color: var(--ink); line-height: 1.35;">
-            You are always <em style="color:var(--ink-soft);">in control</em> of what is created.</li>
-          <li class="reveal d4"
-            style="padding: 22px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font-family: var(--serif); font-size: 22px; color: var(--ink); line-height: 1.35;">
-            Designed for <em style="color:var(--ink-soft);">remembrance</em>, not imitation.</li>
-        </ul>
-        <p class="reveal"
-          style="margin-top: 36px; font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 20px; color: var(--ink-soft); line-height: 1.55; max-width: 46ch; text-wrap: pretty;">
-          We understand the emotional weight behind what you're creating. That's why every step is handled thoughtfully.
-        </p>
-      </div>
-    </section>
-  </div>
-
-  <!-- EXPERIENCE / DIFFERENTIATION -->
-  <div class="wrap">
-    <section class="section pricing">
-      <div class="section-lead reveal" style="justify-content:center;">WHY THIS FEELS DIFFERENT</div>
-      <h2 class="reveal d1">Most tools <em>generate</em>.<br />We <em>craft</em>.</h2>
-      <p class="reveal d2">Every memory is approached individually — with attention to tone, pacing, and emotional
-        nuance. Because this isn't just content. <em style="color:var(--ink); font-style: italic;">It's something
-          personal.</em></p>
     </section>
   </div>
 
@@ -2776,6 +3711,88 @@
       });
     });
 
+    /* Our Work — peek-style horizontal carousel */
+    (function () {
+      const root = document.getElementById('workGallery');
+      if (!root) return;
+      const viewport = root.querySelector('.gallery-viewport');
+      const track = root.querySelector('.gallery-track');
+      const cards = track ? track.querySelectorAll('.vcard') : [];
+      const prev = root.querySelector('.gal-arrow.prev');
+      const next = root.querySelector('.gal-arrow.next');
+      if (!viewport || !track || !cards.length || !prev || !next) return;
+
+      let idx = 1; // start with the middle card so both sides peek
+
+      function go(n) {
+        idx = Math.max(0, Math.min(cards.length - 1, n));
+        // use offsetWidth so the scale() on inactive cards doesn't skew the math
+        const vw = viewport.offsetWidth;
+        const cardW = cards[0].offsetWidth;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        const targetX = idx * (cardW + gap) - (vw - cardW) / 2;
+        track.style.transform = `translateX(${-targetX}px)`;
+        cards.forEach((c, i) => c.classList.toggle('is-active', i === idx));
+      }
+
+      track.style.transition = 'transform .55s cubic-bezier(.2,.7,.2,1)';
+
+      prev.addEventListener('click', () => {
+        const target = idx - 1 < 0 ? cards.length - 1 : idx - 1;
+        go(target);
+      });
+      next.addEventListener('click', () => {
+        const target = idx + 1 >= cards.length ? 0 : idx + 1;
+        go(target);
+      });
+
+      cards.forEach((c, i) => c.addEventListener('click', (e) => {
+        if (i !== idx) {
+          e.stopPropagation();
+          go(i);
+        }
+      }, true));
+
+      document.addEventListener('keydown', (e) => {
+        if (!root.matches(':hover') && document.activeElement !== prev && document.activeElement !== next) return;
+        if (e.key === 'ArrowLeft') prev.click();
+        if (e.key === 'ArrowRight') next.click();
+      });
+
+      window.addEventListener('resize', () => go(idx));
+      // initial position once layout is ready
+      requestAnimationFrame(() => go(idx));
+    })();
+
+    /* Share card — scroll-driven rise+fade for the photo */
+    (function () {
+      const photo = document.querySelector('.p-share .p-share-photo');
+      if (!photo) return;
+      const card = document.querySelector('.p-share');
+      let raf = 0;
+
+      function update() {
+        raf = 0;
+        const r = card.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        // p reaches 1 by the time the card center is at the viewport center
+        const span = (vh + r.height) / 2;
+        const traveled = vh - r.top;
+        let p = Math.max(0, Math.min(1, traveled / span));
+        // ease-out cubic for a cinematic, decelerating settle
+        p = 1 - Math.pow(1 - p, 3);
+        photo.style.setProperty('--p', p.toFixed(3));
+      }
+
+      function schedule() {
+        if (!raf) raf = requestAnimationFrame(update);
+      }
+
+      window.addEventListener('scroll', schedule, { passive: true });
+      window.addEventListener('resize', schedule);
+      update();
+    })();
+
     /* Heart of vertical "stitch" lines — scatters from the cursor and re-forms */
     (function () {
       const root = document.getElementById('heartStitch');
@@ -2784,7 +3801,8 @@
 
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      const COUNT = 64;
+      const SAMPLES = 90;        // points along the heart curve
+      const PER_SAMPLE = 2;      // circles per sample → packs the band
       const stitches = [];
       let W = 0, H = 0, CX = 0, CY = 0, SCALE = 1;
 
@@ -2794,33 +3812,54 @@
         const r = root.getBoundingClientRect();
         W = r.width; H = r.height;
         CX = W / 2; CY = H / 2;
-        // heart parametric bbox: x in [-16,16], y peak ~11.7, y bottom ~-16.7
         const sx = (W * 0.86) / 32;
         const sy = (H * 0.86) / 28.4;
         SCALE = Math.min(sx, sy);
 
-        for (let i = 0; i < COUNT; i++) {
-          const t = (i / COUNT) * Math.PI * 2;
+        const BAND = SCALE * 1.6; // half-thickness of the heart band, in px
+
+        for (let i = 0; i < SAMPLES; i++) {
+          const t = (i / SAMPLES) * Math.PI * 2;
           const px = 16 * Math.pow(Math.sin(t), 3);
           const py = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-          const hx = CX + px * SCALE;
-          const hy = CY - (py + 2.5) * SCALE;
-
-          // outward direction = vector from heart center to point
-          const angle = Math.atan2(hy - CY, hx - CX);
+          const baseX = CX + px * SCALE;
+          const baseY = CY - (py + 2.5) * SCALE;
+          const angle = Math.atan2(baseY - CY, baseX - CX);
           const ox = Math.cos(angle);
           const oy = Math.sin(angle);
-          // dash long-axis is vertical by default; subtract 90° so it aligns radially
-          const angleDeg = angle * 180 / Math.PI - 90;
+          // tangent direction (perpendicular to radial)
+          const txu = -oy;
+          const tyu = ox;
 
-          const el = document.createElement('span');
-          el.className = 'stitch';
-          el.style.left = hx + 'px';
-          el.style.top = hy + 'px';
-          el.style.transform = `translate(-50%, -50%) rotate(${angleDeg}deg)`;
-          root.appendChild(el);
+          // distance from the two cusps (top dip at t=0/2π, bottom point at t=π)
+          // → 0 at cusps, 1 once we're far enough away
+          const dCusp = Math.min(t, Math.abs(t - Math.PI), Math.abs(t - 2 * Math.PI));
+          const cuspWeight = Math.min(1, dCusp / (Math.PI / 3));
 
-          stitches.push({ el, hx, hy, ox, oy, angleDeg, cx: 0, cy: 0 });
+          for (let j = 0; j < PER_SAMPLE; j++) {
+            // skip more aggressively near cusps to avoid pile-ups
+            if (Math.random() > 0.35 + 0.65 * cuspWeight) continue;
+
+            // also shrink the band near cusps so survivors don't stack on the spine
+            const localBand = BAND * (0.35 + 0.65 * cuspWeight);
+            const radial = (Math.random() - 0.5) * 2 * localBand;
+            const tangent = (Math.random() - 0.5) * SCALE * 0.9 * (0.5 + 0.5 * cuspWeight);
+            const hx = baseX + ox * radial + txu * tangent;
+            const hy = baseY + oy * radial + tyu * tangent;
+
+            // power-biased size: lots of small, occasional large
+            const size = 4 + Math.pow(Math.random(), 1.6) * 26;
+
+            const el = document.createElement('span');
+            el.className = 'stitch';
+            el.style.left = hx + 'px';
+            el.style.top = hy + 'px';
+            el.style.width = size + 'px';
+            el.style.height = size + 'px';
+            root.appendChild(el);
+
+            stitches.push({ el, hx, hy, ox, oy, cx: 0, cy: 0 });
+          }
         }
       }
 
@@ -2868,7 +3907,8 @@
           const ty = s.oy * mag;
           s.cx += (tx - s.cx) * EASE;
           s.cy += (ty - s.cy) * EASE;
-          s.el.style.transform = `translate(calc(-50% + ${s.cx.toFixed(2)}px), calc(-50% + ${s.cy.toFixed(2)}px)) rotate(${s.angleDeg}deg)`;
+          s.el.style.setProperty('--tx', s.cx.toFixed(2) + 'px');
+          s.el.style.setProperty('--ty', s.cy.toFixed(2) + 'px');
         }
         requestAnimationFrame(tick);
       }
